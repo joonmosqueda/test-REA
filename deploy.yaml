@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  tasks:
+    - name: load config file
+      include_vars:
+        file: "{{ config_file }}"
+        name: config
+    - name: template replace placeholder with new amiid
+      replace:
+        dest: ./cloudformation.yaml
+        regexp: '{AMIID}'
+        replace: "{{ ami }}"
+    - name: create jenkins stack
+      cloudformation:
+        stack_name: "{{ ((config_file | basename ) | splitext)[0] }}-jenkins"
+        state: "present"
+        region: "ap-southeast-2"
+        template: "cloudformation.yaml"
+        template_parameters: '{{ config.Parameters }}'
+        tags: '{{ config.Tags }}'
+        validate_certs: no

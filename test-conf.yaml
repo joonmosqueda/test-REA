@@ -1,0 +1,15 @@
+Tags:
+  Owner: "Diego Tognola"
+  Name: qba_banker_jenkins
+  TechnicalService: Jenkins
+  ApplicationID: QBA_Banker_Jenkins
+  CostCentre: V_CashFlowFinance
+  Environment: cff-nonprod
+Parameters:
+  LogGroupName: qba-banker-jenkins
+  KeyName: "cffquickbiz"
+  VPC: "vpc-bf0634da"
+  Subnets: "subnet-d9a351bd,subnet-2e021d59,subnet-af09e8f6"
+  InstanceType: "t2.large"
+  InstanceProfile: "CFFSlaveProvisioningInstanceProfile"
+  InternalCertificateId: "arn:aws:iam::778690179243:server-certificate/qba-banker-jenkins"

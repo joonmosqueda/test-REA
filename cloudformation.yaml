@@ -1,0 +1,161 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Application and Cloud Platforms Jenkins Stack
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: "              EC2 CONFIGURATION                         "
+        Parameters:
+          - KeyName
+          - InstanceType
+          - InstanceProfile
+      -
+        Label:
+          default: "            NETWORK CONFIGURATION                       "
+        Parameters:
+          - VPC 
+          - Subnets
+          - InternalCertificateId
+      -
+        Label:
+          default: "                   LOGGING                              "
+        Parameters:
+          - LogGroupName
+    ParameterLabels:
+      LogGroupName:
+        default: "AWS Cloudwatch LogGroup to store log events"
+      KeyName:
+        default: "EC2 Key pair for Jenkins instance"
+      VPC:
+        default: "VPC hosting Jenkins instance"
+      Subnets:
+        default: "Provide list of minimum 3 subnets in the VPC. 1 per availability zone"
+      InstanceType:
+        default: "EC2 instance type to launch Jenkins"
+      InstanceProfile:
+        default: "EC2 instance profile for Jenkins server"
+      InternalCertificateId:
+        default: "ARN of the SSL certificate uploaded to AWS IAM"
+Parameters:
+  LogGroupName:
+    Type: String
+    Description: Cloudwatch LogGroup Name eg - 'team-jenkins-logs'
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: KeyPair Name
+  VPC: 
+    Type: AWS::EC2::VPC::Id
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+  InstanceType:
+    Type: String
+    Default: t2.medium
+  InstanceProfile:
+    Type: String
+    Description: eg - 'TeamProvisioningInstanceProfile'
+  InternalCertificateId:
+    Type: String 
+    Description: ARN of the IAM server certificate to use with the ELB.
+
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for jenkins
+      SecurityGroupIngress:
+      - CidrIp: 10.0.0.0/8
+        FromPort: '443'
+        ToPort: '443'
+        IpProtocol: "-1"
+      - CidrIp: 10.0.0.0/8
+        FromPort: '22'
+        ToPort: '22'
+        IpProtocol: "-1"
+      VpcId: !Ref VPC
+  LaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      KeyName: !Ref KeyName
+      ImageId: {AMIID}
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroups:
+      - !Ref SecurityGroup
+      InstanceType: !Ref InstanceType
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sdf"
+        Ebs:
+          VolumeSize: '10'
+          VolumeType: gp2
+          Encrypted: true
+      UserData:
+        Fn::Base64:
+          !Sub |
+          #!/bin/bash -ex
+          exec >> /var/log/user-data.log
+          exec 2>&1
+          echo "Running user-data.sh"
+          /usr/local/bin/user-data.sh
+          /bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoscalingGroup --region ${AWS::Region}
+
+  AutoscalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref Subnets
+      LaunchConfigurationName: !Ref LaunchConfiguration
+      MinSize: '0'
+      MaxSize: '2'
+      DesiredCapacity: '1'
+      LoadBalancerNames:
+      - !Ref ELB
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinInstancesInService: '1'
+        MaxBatchSize: '1'
+        WaitOnResourceSignals: true
+        PauseTime: PT30M
+        SuspendProcesses:
+        - ScheduledActions
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: PT30M
+  EveningScaleDown:
+    Type: AWS::AutoScaling::ScheduledAction
+    Properties:
+      DesiredCapacity: '0'
+      Recurrence: 0 11 * * *
+      AutoScalingGroupName: !Ref AutoscalingGroup
+    DependsOn:
+    - AutoscalingGroup
+  MorningScaleUp:
+    Type: AWS::AutoScaling::ScheduledAction
+    Properties:
+      DesiredCapacity: '1'
+      Recurrence: 30 19 * * SUN-THU
+      AutoScalingGroupName: !Ref AutoscalingGroup
+    DependsOn:
+    - AutoscalingGroup
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref LogGroupName
+      RetentionInDays: '7'
+  ELB:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      SecurityGroups:
+      - !Ref SecurityGroup
+      Subnets: !Ref Subnets
+      Scheme: internal
+      Listeners:
+      - InstancePort: 8080
+        InstanceProtocol: HTTP
+        LoadBalancerPort: 443
+        Protocol: HTTPS
+        SSLCertificateId: !Ref InternalCertificateId
+      - InstancePort: 8086
+        InstanceProtocol: TCP
+        LoadBalancerPort: 8086
+        Protocol: TCP

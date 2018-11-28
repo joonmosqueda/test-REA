@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<scriptApproval plugin="script-security@1.30">
+  <approvedScriptHashes/>
+  <approvedSignatures>
+    <string>method groovy.lang.GroovyObject getProperty java.lang.String</string>
+    <string>method groovy.lang.GroovyObject invokeMethod java.lang.String java.lang.Object</string>
+    <string>method hudson.model.Item getName</string>
+    <string>method hudson.model.ItemGroup getItem java.lang.String</string>
+    <string>method hudson.model.ItemGroup getItems</string>
+    <string>method hudson.model.Run getCause java.lang.Class</string>
+    <string>method hudson.model.Job getLastBuild</string>
+    <string>method hudson.model.Job getLastSuccessfulBuild</string>
+    <string>method hudson.model.Run getArtifacts</string>
+    <string>method hudson.model.Run$Artifact getFileName</string>
+    <string>method java.io.File exists</string>
+    <string>method java.lang.String join java.lang.CharSequence java.lang.CharSequence[]</string>
+    <string>method java.util.Collection remove java.lang.Object</string>
+    <string>method java.util.Date getTime</string>
+    <string>method jenkins.model.Jenkins getItemByFullName java.lang.String</string>
+    <string>method org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper getRawBuild</string>
+    <string>new java.io.File java.lang.String</string>
+    <string>new java.lang.Exception java.lang.String java.lang.Throwable</string>
+    <string>new java.lang.StringBuilder</string>
+    <string>new java.util.LinkedList</string>
+    <string>staticField hudson.model.Result SUCCESS</string>
+    <string>staticMethod java.lang.Thread sleep long</string>
+    <string>staticMethod jenkins.model.Jenkins getInstance</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods dump java.lang.Object</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods eachFile java.io.File groovy.lang.Closure</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods execute java.lang.String</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods find java.util.Collection groovy.lang.Closure</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods findResults java.util.Collection groovy.lang.Closure</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods getAt java.util.Collection java.lang.String</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods getText java.io.File</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods minus java.util.List java.lang.Object</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods println groovy.lang.Closure java.lang.Object</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods split java.lang.String</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods stripMargin java.lang.String</string>
+    <string>staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods toList java.lang.Object[]</string>
+    <string>staticMethod org.codehaus.groovy.runtime.ProcessGroovyMethods consumeProcessOutput java.lang.Process java.lang.Appendable java.lang.Appendable</string>
+    <string>staticMethod org.codehaus.groovy.runtime.ProcessGroovyMethods getText java.lang.Process</string>
+  </approvedSignatures>
+  <aclApprovedSignatures/>
+  <approvedClasspathEntries/>
+  <pendingScripts/>
+  <pendingSignatures/>
+  <pendingClasspathEntries/>
+</scriptApproval>
