@@ -1,87 +1,74 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Application and Cloud Platforms Jenkins Stack
-Metadata:
-  AWS::CloudFormation::Interface:
-    ParameterGroups:
-      -
-        Label:
-          default: "              EC2 CONFIGURATION                         "
-        Parameters:
-          - KeyName
-          - InstanceType
-          - InstanceProfile
-      -
-        Label:
-          default: "            NETWORK CONFIGURATION                       "
-        Parameters:
-          - VPC 
-          - Subnets
-          - InternalCertificateId
-      -
-        Label:
-          default: "                   LOGGING                              "
-        Parameters:
-          - LogGroupName
-    ParameterLabels:
-      LogGroupName:
-        default: "AWS Cloudwatch LogGroup to store log events"
-      KeyName:
-        default: "EC2 Key pair for Jenkins instance"
-      VPC:
-        default: "VPC hosting Jenkins instance"
-      Subnets:
-        default: "Provide list of minimum 3 subnets in the VPC. 1 per availability zone"
-      InstanceType:
-        default: "EC2 instance type to launch Jenkins"
-      InstanceProfile:
-        default: "EC2 instance profile for Jenkins server"
-      InternalCertificateId:
-        default: "ARN of the SSL certificate uploaded to AWS IAM"
 Parameters:
   LogGroupName:
     Type: String
-    Description: Cloudwatch LogGroup Name eg - 'team-jenkins-logs'
+    Description: Cloudwatch LogGroup Name eg - 'test-logs'
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
-    Description: KeyPair Name
+    Description: EC2 KeyPair Name
   VPC: 
     Type: AWS::EC2::VPC::Id
+    Default: vpc-38f6fa5d
+    Description: "VPC Id"
   Subnets:
     Type: List<AWS::EC2::Subnet::Id>
+    Description: "Ec2 subnets"
   InstanceType:
     Type: String
     Default: t2.medium
+    Description: "EC2 Instance Type"
   InstanceProfile:
     Type: String
-    Description: eg - 'TeamProvisioningInstanceProfile'
+    Description: eg - 'TestProvisioningInstanceProfile'
   InternalCertificateId:
     Type: String 
     Description: ARN of the IAM server certificate to use with the ELB.
+  AMI:
+    Type: String
+    Default: "ami-09df22d51ee83e486"
+    Description: "AMI ID"
 
 Resources:
-  SecurityGroup:
+  ELBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Security group for jenkins
+      GroupDescription: Security group for elb
       SecurityGroupIngress:
-      - CidrIp: 10.0.0.0/8
+      - 
+        CidrIp: 10.0.0.0/8
         FromPort: '443'
         ToPort: '443'
-        IpProtocol: "-1"
-      - CidrIp: 10.0.0.0/8
+        IpProtocol: "tcp"
+      VpcId: !Ref VPC
+
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for ec2
+      SecurityGroupIngress:
+      - 
+        IpProtocol: "tcp"
+        FromPort: '80'
+        ToPort: '80'
+        SourceSecurityGroupId: !Ref ELBSecurityGroup
+      - 
+        CidrIp: 10.0.0.0/8
         FromPort: '22'
         ToPort: '22'
-        IpProtocol: "-1"
+        IpProtocol: "tcp"        
       VpcId: !Ref VPC
+    DependsOn: ELBSecurityGroup
+
   LaunchConfiguration:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       KeyName: !Ref KeyName
-      ImageId: {AMIID}
+      ImageId: !Ref AMI
       IamInstanceProfile: !Ref InstanceProfile
       SecurityGroups:
-      - !Ref SecurityGroup
+      - !Ref EC2SecurityGroup
       InstanceType: !Ref InstanceType
       BlockDeviceMappings:
       - DeviceName: "/dev/sdf"
@@ -105,8 +92,10 @@ Resources:
       VPCZoneIdentifier: !Ref Subnets
       LaunchConfigurationName: !Ref LaunchConfiguration
       MinSize: '0'
-      MaxSize: '2'
-      DesiredCapacity: '1'
+      MaxSize: '4'
+      DesiredCapacity: '3'
+      HealthCheckType: "ELB"
+      HealthCheckGracePeriod: '300'
       LoadBalancerNames:
       - !Ref ELB
     UpdatePolicy:
@@ -146,16 +135,18 @@ Resources:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
       SecurityGroups:
-      - !Ref SecurityGroup
+      - !Ref ELBSecurityGroup
       Subnets: !Ref Subnets
       Scheme: internal
       Listeners:
-      - InstancePort: 8080
+      - InstancePort: 80
         InstanceProtocol: HTTP
         LoadBalancerPort: 443
         Protocol: HTTPS
         SSLCertificateId: !Ref InternalCertificateId
-      - InstancePort: 8086
-        InstanceProtocol: TCP
-        LoadBalancerPort: 8086
-        Protocol: TCP
+      HealthCheck:
+        Target: "HTTPS:80"
+        HealthyThreshold: '3'
+        UnhealthyThreshold: '2'
+        Interval: '10'
+        Timeout: '6'
