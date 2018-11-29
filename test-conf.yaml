@@ -1,12 +1,10 @@
 Tags:
-  Owner: "Diego Tognola"
-  Name: qba_banker_jenkins
-  TechnicalService: Jenkins
-  ApplicationID: QBA_Banker_Jenkins
-  CostCentre: V_CashFlowFinance
-  Environment: cff-nonprod
+  Owner: "Joon Mosqueda"
+  Name: test_REA
+  TechnicalService: SimpleSinatraApp
+  Environment: nonprod
 Parameters:
-  LogGroupName: qba-banker-jenkins
+  LogGroupName: test_REA
   KeyName: "cffquickbiz"
   VPC: "vpc-bf0634da"
   Subnets: "subnet-d9a351bd,subnet-2e021d59,subnet-af09e8f6"
