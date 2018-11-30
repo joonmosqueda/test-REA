@@ -53,8 +53,8 @@ Resources:
       SecurityGroupIngress:
       - 
         IpProtocol: "tcp"
-        FromPort: '80'
-        ToPort: '80'
+        FromPort: '9292'
+        ToPort: '9292'
         SourceSecurityGroupId: !Ref ELBSecurityGroup
       - 
         CidrIp: !Ref InternalNetwork
