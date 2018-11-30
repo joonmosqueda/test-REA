@@ -76,7 +76,14 @@ Resources:
           #!/bin/bash -ex
           exec >> /var/log/user-data.log
           exec 2>&1
-          echo "Running user-data.sh"
+          echo "Deploying Sinatra App"
+          yum install -y rubygems
+          gem install bundler
+          mkdir /sinatraApp
+          cd /sinatraApp
+          git clone git@github.com:rea-cruitment/simple-sinatra-app.git
+          bundle install
+          bundle exec rackup
           #/usr/local/bin/user-data.sh
           /bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoscalingGroup --region ${AWS::Region}
 
@@ -139,7 +146,7 @@ Resources:
         Protocol: HTTPS
         SSLCertificateId: !Ref InternalCertificateId
       HealthCheck:
-        Target: "HTTPS:80/"
+        Target: "HTTP:80/"
         HealthyThreshold: '3'
         UnhealthyThreshold: '2'
         Interval: '10'
