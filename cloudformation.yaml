@@ -26,11 +26,11 @@ Parameters:
     Description: "AMI ID"
   InternalNetwork:
     Type: String
-    Default: "0.0.0.0/32"
+    Default: "0.0.0.0/0"
     Description: "Network CIDR"
   ExternalNetwork:
     Type: String
-    Default: "0.0.0.0/32"
+    Default: "0.0.0.0/0"
     Description: "Network CIDR"
 
 Resources:
