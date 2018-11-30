@@ -9,6 +9,5 @@ Parameters:
   VPC: "vpc-82f789e5"
   Subnets: "subnet-5217c90a,subnet-770a2610,subnet-86045dcf"
   InstanceType: "t2.micro"
-  InternalCertificateId: "arn:aws:iam::778690179243:server-certificate/qba-banker-jenkins"
-  TechnicalService: SimpleSinatraApp
-  Environment: nonprod
+  InternalCertificateId: "arn:aws:iam::724867262719:server-certificate/SelfSigned"
+  AMI: ami-08589eca6dcc9b39c

@@ -10,7 +10,6 @@ Parameters:
     Description: EC2 KeyPair Name
   VPC: 
     Type: AWS::EC2::VPC::Id
-    Default: vpc-38f6fa5d
     Description: "VPC Id"
   Subnets:
     Type: List<AWS::EC2::Subnet::Id>
@@ -19,15 +18,11 @@ Parameters:
     Type: String
     Default: t2.micro
     Description: "EC2 Instance Type"
-  InstanceProfile:
-    Type: String
-    Description: eg - 'TestProvisioningInstanceProfile'
   InternalCertificateId:
     Type: String 
     Description: ARN of the IAM server certificate to use with the ELB.
   AMI:
     Type: String
-    Default: "ami-09df22d51ee83e486"
     Description: "AMI ID"
 
 Resources:
@@ -37,7 +32,7 @@ Resources:
       GroupDescription: Security group for elb
       SecurityGroupIngress:
       - 
-        CidrIp: 10.0.0.0/8
+        CidrIp: 0.0.0.0/0
         FromPort: '443'
         ToPort: '443'
         IpProtocol: "tcp"
@@ -54,7 +49,7 @@ Resources:
         ToPort: '80'
         SourceSecurityGroupId: !Ref ELBSecurityGroup
       - 
-        CidrIp: 10.0.0.0/8
+        CidrIp: 0.0.0.0/0
         FromPort: '22'
         ToPort: '22'
         IpProtocol: "tcp"        
@@ -66,7 +61,6 @@ Resources:
     Properties:
       KeyName: !Ref KeyName
       ImageId: !Ref AMI
-      IamInstanceProfile: !Ref InstanceProfile
       SecurityGroups:
       - !Ref EC2SecurityGroup
       InstanceType: !Ref InstanceType
