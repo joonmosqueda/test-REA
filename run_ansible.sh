@@ -6,7 +6,6 @@ export no_proxy=localhost,169.254.169.254,patching-server-hui.ext.national.com.a
 export AWS_DEFAULT_REGION=ap-southeast-2
 
 BASE_DIR=$(dirname $0)
-AMI_ID=$(${BASE_DIR}/scripts/bootstrap/latestami.sh)
 
 CONFIG_FILENAME=$1
 
@@ -19,4 +18,4 @@ if [[ ! -f ${CONFIG_FILENAME} ]] ; then
     exit 1
 fi
 
-ansible-playbook deploy.yaml --extra-vars '{"ami":"'${AMI_ID}'","config_file":"'${CONFIG_FILENAME}'"}' -vvv
+ansible-playbook deploy.yaml --extra-vars '{"config_file":"'${CONFIG_FILENAME}'"}' -vvv
