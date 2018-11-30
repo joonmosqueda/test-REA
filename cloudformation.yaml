@@ -24,6 +24,14 @@ Parameters:
   AMI:
     Type: String
     Description: "AMI ID"
+  InternalNetwork:
+    Type: String
+    Default: "0.0.0.0/32"
+    Description: "Network CIDR"
+  ExternalNetwork:
+    Type: String
+    Default: "0.0.0.0/32"
+    Description: "Network CIDR"
 
 Resources:
   ELBSecurityGroup:
@@ -32,7 +40,7 @@ Resources:
       GroupDescription: Security group for elb
       SecurityGroupIngress:
       - 
-        CidrIp: 0.0.0.0/0
+        CidrIp: !Ref ExternalNetwork
         FromPort: '443'
         ToPort: '443'
         IpProtocol: "tcp"
@@ -49,7 +57,7 @@ Resources:
         ToPort: '80'
         SourceSecurityGroupId: !Ref ELBSecurityGroup
       - 
-        CidrIp: 0.0.0.0/0
+        CidrIp: !Ref InternalNetwork
         FromPort: '22'
         ToPort: '22'
         IpProtocol: "tcp"        
@@ -79,11 +87,12 @@ Resources:
           echo "Deploying Sinatra App"
           yum install -y git rubygems
           gem install bundler
-          mkdir /sinatraApp
-          cd /sinatraApp
-          git clone git@github.com:rea-cruitment/simple-sinatra-app.git
+          mkdir /REA
+          cd /REA
+          git clone https://github.com/rea-cruitment/simple-sinatra-app.git
+          cd simple-sinatra-app
           bundle install
-          bundle exec rackup
+          bundle exec rackup &
           #/usr/local/bin/user-data.sh
           /bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoscalingGroup --region ${AWS::Region}
 
@@ -140,13 +149,13 @@ Resources:
       Subnets: !Ref Subnets
       Scheme: internal
       Listeners:
-      - InstancePort: 80
+      - InstancePort: 9292
         InstanceProtocol: HTTP
         LoadBalancerPort: 443
         Protocol: HTTPS
         SSLCertificateId: !Ref InternalCertificateId
       HealthCheck:
-        Target: "HTTP:80/"
+        Target: "HTTP:9292/"
         HealthyThreshold: '3'
         UnhealthyThreshold: '2'
         Interval: '10'
