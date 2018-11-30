@@ -10,3 +10,14 @@ Parameters:
   Subnets: "subnet-5217c90a,subnet-770a2610,subnet-86045dcf"
   InstanceType: "t2.micro"
   InternalCertificateId: "arn:aws:iam::778690179243:server-certificate/qba-banker-jenkins"
+  TechnicalService: SimpleSinatraApp
+  Environment: nonprod
+Parameters:
+  LogGroupName: test_REA
+  KeyName: "cffquickbiz"
+  VPC: "vpc-bf0634da"
+  Subnets: "subnet-d9a351bd,subnet-2e021d59,subnet-af09e8f6"
+  InstanceType: "t2.large"
+  InstanceProfile: "CFFSlaveProvisioningInstanceProfile"
+  InternalCertificateId: "arn:aws:iam::778690179243:server-certificate/qba-banker-jenkins"
+>>>>>>> 57c3113a62e12d5bd7aa00950fc5235c57a08f75
