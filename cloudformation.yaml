@@ -87,14 +87,11 @@ Resources:
           echo "Deploying Sinatra App"
           yum install -y git rubygems
           gem install bundler
-          mkdir /REA
-          cd /REA
-          git clone https://github.com/rea-cruitment/simple-sinatra-app.git
-          cd simple-sinatra-app
+          git clone https://github.com/rea-cruitment/simple-sinatra-app.git /REA/simple-sinatra-app
+          cd /REA/simple-sinatra-app
           bundle install
           bundle exec rackup &
-          #/usr/local/bin/user-data.sh
-          /bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoscalingGroup --region ${AWS::Region}
+          #/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoscalingGroup --region ${AWS::Region}
 
   AutoscalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
