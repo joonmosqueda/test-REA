@@ -1,15 +1,12 @@
 Tags:
-  Owner: "Diego Tognola"
-  Name: qba_banker_jenkins
-  TechnicalService: Jenkins
-  ApplicationID: QBA_Banker_Jenkins
-  CostCentre: V_CashFlowFinance
-  Environment: cff-nonprod
+  Owner: "Joon Mosqueda"
+  Name: testREA
+  TechnicalService: SimpleSinatraApp
+  Environment: nonprod
 Parameters:
-  LogGroupName: qba-banker-jenkins
-  KeyName: "cffquickbiz"
-  VPC: "vpc-bf0634da"
-  Subnets: "subnet-d9a351bd,subnet-2e021d59,subnet-af09e8f6"
-  InstanceType: "t2.large"
-  InstanceProfile: "CFFSlaveProvisioningInstanceProfile"
+  LogGroupName: SimpleSinatraApp
+  KeyName: "mjoonjoel_20181126"
+  VPC: "vpc-82f789e5"
+  Subnets: "subnet-5217c90a,subnet-770a2610,subnet-86045dcf"
+  InstanceType: "t2.micro"
   InternalCertificateId: "arn:aws:iam::778690179243:server-certificate/qba-banker-jenkins"

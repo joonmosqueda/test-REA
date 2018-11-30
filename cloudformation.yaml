@@ -17,7 +17,7 @@ Parameters:
     Description: "Ec2 subnets"
   InstanceType:
     Type: String
-    Default: t2.medium
+    Default: t2.micro
     Description: "EC2 Instance Type"
   InstanceProfile:
     Type: String
@@ -83,7 +83,7 @@ Resources:
           exec >> /var/log/user-data.log
           exec 2>&1
           echo "Running user-data.sh"
-          /usr/local/bin/user-data.sh
+          #/usr/local/bin/user-data.sh
           /bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoscalingGroup --region ${AWS::Region}
 
   AutoscalingGroup:
