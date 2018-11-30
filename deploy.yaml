@@ -5,9 +5,9 @@
       include_vars:
         file: "{{ config_file }}"
         name: config
-    - name: create jenkins stack
+    - name: create test stack
       cloudformation:
-        stack_name: "{{ ((config_file | basename ) | splitext)[0] }}-jenkins"
+        stack_name: "{{ ((config_file | basename ) | splitext)[0] }}"
         state: "present"
         region: "ap-southeast-2"
         template: "cloudformation.yaml"

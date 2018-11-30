@@ -139,7 +139,7 @@ Resources:
         Protocol: HTTPS
         SSLCertificateId: !Ref InternalCertificateId
       HealthCheck:
-        Target: "HTTPS:80"
+        Target: "HTTPS:80/"
         HealthyThreshold: '3'
         UnhealthyThreshold: '2'
         Interval: '10'
