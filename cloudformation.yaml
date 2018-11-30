@@ -77,7 +77,7 @@ Resources:
           exec >> /var/log/user-data.log
           exec 2>&1
           echo "Deploying Sinatra App"
-          yum install -y rubygems
+          yum install -y git rubygems
           gem install bundler
           mkdir /sinatraApp
           cd /sinatraApp
