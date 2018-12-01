@@ -22,7 +22,7 @@ Once built, Simple Sinatra Web App Stack will come with the following features:
 Launching TEST-REA requires a bit of setup work prior to actually creating the instance.  
 
 ### Pre-requistes 
-At this stage, there are a number of manaual prerequisite steps needed prior to provisioning a TEST-REA stack.  These are things like certificate creation and collection information required to launch the product.
+At this stage, there are a number of manaual prerequisite steps needed prior to provisioning a TEST-REA stack.  These are things like certificate creation and collection of information required to launch the product.
 
 Follow this [step-by-step guide for meeting prerequisites](docs/PREREQS.md) before launching a TEST-REA stack.  
 
@@ -34,26 +34,26 @@ Further information on parameters and their values can be found [here](docs/CFN_
 
 
 ### How to launch a TEST-REA stack
-The repository provides two ways to launch a new TEST-REA stack, one using `Ansible` and one using the `AWS CLI`.  Refer to [the prerequisites](docs/PREREQS.md) for details on how to obtain the AMI ID.
+The repository provides two ways to launch a new TEST-REA stack, one using `Ansible` and one using the `AWS CLI`.  
 
 **Ansible**
 1. Install Ansible on your build box, if it isn't already installed.
-2. Create a parameters file for Ansible, simillar to [this example](https://github.aus.thenational.com/CENTRAL/jenkins-bootstrap-template/blob/master/template-ansible-params.yaml).
-3. From the root of the Jenkins repo checkout, run the ansible playbook with parameters. 
+2. Create a parameters file for Ansible, simillar to [this example](templates/template-conf.yaml).
+3. From the root of the TEST-REA repo checkout, run the ansible playbook with parameters. 
    ```
-   run_ansible.sh <path_to_config_file
+   run_ansible.sh <path_to_config_file>
 
-   eg: run_ansible.sh ~/config/jenkins_ansible.yaml
+   eg: ./run_ansible.sh ./test_conf.yaml
    ```
 
 **CloudFormation**
 1. Create the Cloudformation parameters and tags files, using the data obtained from the prerequisite steps.  Template files are available, and all blank values must be provided.
    For additional information on passing parameters with CloudFormation, refer to [this AWS post](https://aws.amazon.com/blogs/devops/passing-parameters-to-cloudformation-stacks-with-the-aws-cli-and-powershell/)
-   1. Parameters file: https://github.aus.thenational.com/CENTRAL/jenkins-bootstrap-template/blob/master/template-cloudformation-params.json
-   1. Tags file: https://github.aus.thenational.com/CENTRAL/jenkins-bootstrap-template/blob/master/template-cloudformation-tags.json
-1. From your build box, which must be configured with the correct instance profile, run the AWS CLI command from the root of the Jenkins rpeository you cloned earlier.
+   1. Parameters file: templates/template-cloudformation-params.json
+   2. Tags file: templates/template-cloudformation-tags.json
+2. From your build box, which must be configured with the correct instance profile, run the AWS CLI command from the root of the TEST-REA rpeository you cloned earlier.
    ```
-   aws cloudformation create-stack --stack-name my-jenkins --template-body file://cloudformation.yaml --parameters file:///some/local/path/params.json --tags file:///some/local/path/tags.json
+   aws cloudformation create-stack --stack-name my-test-rea --template-body file://cloudformation.yaml --parameters file:///some/local/path/params.json --tags file:///some/local/path/tags.json
    ```
 
 ## Upgrading TEST-REA

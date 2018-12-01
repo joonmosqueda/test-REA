@@ -1,0 +1,19 @@
+Tags:
+  Owner: ""
+  Name: 
+  TechnicalService: 
+  Environment: 
+Parameters:
+  KeyName: ""
+  VPC: "vpc-"
+  Subnets: ""
+  InstanceType: ""
+  InstanceMinSize: ""
+  InstanceMaxSize: ""
+  InstanceDesiredCapacity: ""
+  InternalCertificateId: ""
+  AMI: 
+  InternalNetwork: ""
+  ExternalNetwork: ""
+  GitRepo: 
+  GitBranch: 
