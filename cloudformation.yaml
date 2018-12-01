@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Application and Cloud Platforms Jenkins Stack
+Description: AWS testREA Stack
 Parameters:
   LogGroupName:
     Type: String
@@ -104,39 +104,13 @@ Resources:
       HealthCheckGracePeriod: '300'
       LoadBalancerNames:
       - !Ref ELB
-    UpdatePolicy:
-      AutoScalingRollingUpdate:
-        MinInstancesInService: '1'
-        MaxBatchSize: '1'
-        WaitOnResourceSignals: true
-        PauseTime: PT30M
-        SuspendProcesses:
-        - ScheduledActions
-    CreationPolicy:
-      ResourceSignal:
-        Count: 1
-        Timeout: PT30M
-  EveningScaleDown:
-    Type: AWS::AutoScaling::ScheduledAction
-    Properties:
-      DesiredCapacity: '0'
-      Recurrence: 0 11 * * *
-      AutoScalingGroupName: !Ref AutoscalingGroup
-    DependsOn:
-    - AutoscalingGroup
-  MorningScaleUp:
-    Type: AWS::AutoScaling::ScheduledAction
-    Properties:
-      DesiredCapacity: '1'
-      Recurrence: 30 19 * * SUN-THU
-      AutoScalingGroupName: !Ref AutoscalingGroup
-    DependsOn:
-    - AutoscalingGroup
+
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref LogGroupName
       RetentionInDays: '7'
+
   ELB:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
