@@ -2,9 +2,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: AWS testREA Stack
 Parameters:
-  LogGroupName:
-    Type: String
-    Description: Cloudwatch LogGroup Name eg - 'test-logs'
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
     Description: EC2 KeyPair Name
@@ -136,8 +133,7 @@ Resources:
       LoadBalancerNames:
       - !Ref ELB
 
-  LogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Ref LogGroupName
-      RetentionInDays: '7'
+Outputs:
+  LoadBalancerDNSName:
+    Description: The DNSName of the load balancer
+    Value: !GetAtt ELB.DNSName

@@ -4,7 +4,6 @@ Tags:
   TechnicalService: SimpleSinatraApp
   Environment: nonprod
 Parameters:
-  LogGroupName: SimpleSinatraApp
   KeyName: "mjoonjoel_20181126"
   VPC: "vpc-82f789e5"
   Subnets: "subnet-5217c90a,subnet-770a2610,subnet-86045dcf"

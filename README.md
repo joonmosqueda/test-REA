@@ -3,7 +3,7 @@
 ## Product Overview
 The Jenkins product offered via this repository will provide a Jenkins master instance on Amazon EC2, implementing features described in the next section.
 
-![alt text](images/JenkinsMasterSlave.png "Application and Cloud Platforms Jenkins Master Overview")
+![alt text](images/SinatraLogo.png "Application and Cloud Platforms Jenkins Master Overview")
 The supporting pattern is defined [here in Confluence](https://confluence.dss.ext.national.com.au/pages/viewpage.action?pageId=3891335)
 
 
