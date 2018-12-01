@@ -34,10 +34,7 @@ Further information on parameters and their values can be found [here](docs/CFN_
 
 
 ### How to launch a TEST-REA stack
-The repository provides two ways to launch a new TEST-REA stack, one using `Ansible` and one using the `AWS CLI`.  
-
-**Ansible**
-1. Install Ansible on your build box, if it isn't already installed.
+1. Install Ansible and AWS CLI on your build box, if it isn't already installed.
 2. Create a parameters file for Ansible, simillar to [this example](templates/template-conf.yaml).
 3. From the root of the TEST-REA repo checkout, run the ansible playbook with parameters. 
    ```
@@ -46,26 +43,12 @@ The repository provides two ways to launch a new TEST-REA stack, one using `Ansi
    eg: ./run_ansible.sh ./test_conf.yaml
    ```
 
-**CloudFormation**
-1. Create the Cloudformation parameters and tags files, using the data obtained from the prerequisite steps.  Template files are available, and all blank values must be provided.
-   For additional information on passing parameters with CloudFormation, refer to [this AWS post](https://aws.amazon.com/blogs/devops/passing-parameters-to-cloudformation-stacks-with-the-aws-cli-and-powershell/)
-   1. Parameters file: templates/template-cloudformation-params.json
-   2. Tags file: templates/template-cloudformation-tags.json
-2. From your build box, which must be configured with the correct instance profile, run the AWS CLI command from the root of the TEST-REA rpeository you cloned earlier.
-   ```
-   aws cloudformation create-stack --stack-name my-test-rea --template-body file://cloudformation.yaml --parameters file:///some/local/path/params.json --tags file:///some/local/path/tags.json
-   ```
-
 ## Upgrading TEST-REA
-New product versions will be published regularly when there is a new HIP AMI, a new Jenkins version or changes to the underlying Jenkins code.
-This will result in a new AMI being built with the updates required.  
+Upgrade should be performed if a new golden AMI is built.  Running `run_ansible.sh` with updated parameter file will then need to be performed.
 
-When applicable, you can run the `housekeeping/jenkins-rebase-latest` job to update the instance to the new AMI.  This will build a new instance from the latest AMI, add it to the ELB, and when it's
-received a success signal, the old instance will be deleted.  If backups were taken, the latest backup will also be restored to the new instance from S3.
-
-
+## Backup
+As there is no data on the TEST-REA stack that will required restoration if lost, hence backup is not being considered.
 
 ## Responsibilites and ownership
-- ACP provides the ability to publish a pattern via the service catalog.  ACP will publish new product versions when a new HIP AMI is published, or when a new Jenkins version is available.
-- You as the end user builds, owns and operates the service.  It will be your responsibility to ensure the service stays updated in line with NAB's security requirements.  
+- You as the end user builds, owns and operates the service.  It will be your responsibility to ensure the service stays updated in line with your security requirements.  
 
