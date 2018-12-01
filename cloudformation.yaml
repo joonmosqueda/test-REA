@@ -98,8 +98,8 @@ Resources:
       VPCZoneIdentifier: !Ref Subnets
       LaunchConfigurationName: !Ref LaunchConfiguration
       MinSize: '0'
-      MaxSize: '4'
-      DesiredCapacity: '3'
+      MaxSize: '3'
+      DesiredCapacity: '1'
       HealthCheckType: "ELB"
       HealthCheckGracePeriod: '300'
       LoadBalancerNames:
