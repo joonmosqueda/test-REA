@@ -121,7 +121,7 @@ Resources:
       LaunchConfigurationName: !Ref LaunchConfiguration
       MinSize: '0'
       MaxSize: '3'
-      DesiredCapacity: '1'
+      DesiredCapacity: '2'
       HealthCheckType: "ELB"
       HealthCheckGracePeriod: '240'
       LoadBalancerNames:
