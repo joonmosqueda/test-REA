@@ -90,7 +90,7 @@ Resources:
           git clone https://github.com/rea-cruitment/simple-sinatra-app.git /REA/simple-sinatra-app
           cd /REA/simple-sinatra-app
           bundle install
-          bundle exec rackup &
+          bundle exec rackup -o 0.0.0.0
           #/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoscalingGroup --region ${AWS::Region}
 
   AutoscalingGroup:
