@@ -1,0 +1,77 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS buildbox Stack
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: EC2 KeyPair Name
+  VPC: 
+    Type: AWS::EC2::VPC::Id
+    Description: "VPC Id"
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: "Ec2 subnets"
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    Description: "EC2 Instance Type"
+  InstanceMinSize:
+    Type: String
+    Default: "0"
+    Description: "EC2 Minimum Instances"
+  InstanceMaxSize:
+    Type: String
+    Default: "3"
+    Description: "EC2 Maximum Instances"
+  InstanceDesiredCapacity:
+    Type: String
+    Default: "1"
+    Description: "EC2 Desired Instances"   
+  AMI:
+    Type: String
+    Description: "AMI ID"
+  InternalNetwork:
+    Type: String
+    Default: "0.0.0.0/0"
+    Description: "Network CIDR"
+
+Resources:
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for ec2
+      SecurityGroupIngress:
+      - 
+        CidrIp: !Ref InternalNetwork
+        FromPort: '22'
+        ToPort: '22'
+        IpProtocol: "tcp"        
+      VpcId: !Ref VPC
+
+  LaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      KeyName: !Ref KeyName
+      ImageId: !Ref AMI
+      SecurityGroups:
+      - !Ref EC2SecurityGroup
+      InstanceType: !Ref InstanceType
+      UserData:
+        Fn::Base64:
+          !Sub |
+          #!/bin/bash -ex
+          exec >> /var/log/user-data.log
+          exec 2>&1
+          yum install -y ansible
+
+  AutoscalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref Subnets
+      LaunchConfigurationName: !Ref LaunchConfiguration
+      MinSize: !Ref InstanceMinSize
+      MaxSize: !Ref InstanceMaxSize
+      DesiredCapacity: !Ref InstanceDesiredCapacity
+      HealthCheckType: "EC2"
+      HealthCheckGracePeriod: '240'

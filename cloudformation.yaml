@@ -1,6 +1,7 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
 Description: AWS testREA Stack
+
 Parameters:
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
