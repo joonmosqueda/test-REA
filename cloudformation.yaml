@@ -32,6 +32,12 @@ Parameters:
     Type: String
     Default: "0.0.0.0/0"
     Description: "Network CIDR"
+  GitRepo:
+    Type: String
+    Description: Git Repo of App
+  GitBranch:
+    Type: String
+    Description: Git Branch of App
 
 Resources:
   ELBSecurityGroup:
@@ -72,12 +78,6 @@ Resources:
       SecurityGroups:
       - !Ref EC2SecurityGroup
       InstanceType: !Ref InstanceType
-      BlockDeviceMappings:
-      - DeviceName: "/dev/sdf"
-        Ebs:
-          VolumeSize: '10'
-          VolumeType: gp2
-          Encrypted: true
       UserData:
         Fn::Base64:
           !Sub |
@@ -87,30 +87,13 @@ Resources:
           echo "Deploying Sinatra App"
           yum install -y git rubygems
           gem install bundler
-          git clone https://github.com/rea-cruitment/simple-sinatra-app.git /REA/simple-sinatra-app
-          cd /REA/simple-sinatra-app
+          AppFolder=/REA/simple-sinatra-app
+          #git clone https://github.com/rea-cruitment/simple-sinatra-app.git $AppFolder
+          git clone --single-branch -b ${GitBranch} ${GitRepo} $AppFolder
+          cd $AppFolder
           bundle install
-          bundle exec rackup -o 0.0.0.0
-
-  AutoscalingGroup:
-    Type: AWS::AutoScaling::AutoScalingGroup
-    Properties:
-      VPCZoneIdentifier: !Ref Subnets
-      LaunchConfigurationName: !Ref LaunchConfiguration
-      MinSize: '0'
-      MaxSize: '3'
-      DesiredCapacity: '1'
-      HealthCheckType: "ELB"
-      HealthCheckGracePeriod: '300'
-      LoadBalancerNames:
-      - !Ref ELB
-
-  LogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Ref LogGroupName
-      RetentionInDays: '7'
-
+          bundle exec rackup -o 0.0.0.0 -p 9292
+  
   ELB:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
@@ -126,7 +109,26 @@ Resources:
         SSLCertificateId: !Ref InternalCertificateId
       HealthCheck:
         Target: "HTTP:9292/"
-        HealthyThreshold: '3'
-        UnhealthyThreshold: '2'
-        Interval: '10'
-        Timeout: '6'
+        HealthyThreshold: '2'
+        UnhealthyThreshold: '3'
+        Interval: '20'
+        Timeout: '15'
+
+  AutoscalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref Subnets
+      LaunchConfigurationName: !Ref LaunchConfiguration
+      MinSize: '0'
+      MaxSize: '3'
+      DesiredCapacity: '1'
+      HealthCheckType: "ELB"
+      HealthCheckGracePeriod: '240'
+      LoadBalancerNames:
+      - !Ref ELB
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref LogGroupName
+      RetentionInDays: '7'

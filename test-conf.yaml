@@ -11,3 +11,5 @@ Parameters:
   InstanceType: "t2.micro"
   InternalCertificateId: "arn:aws:iam::724867262719:server-certificate/SelfSigned"
   AMI: ami-08589eca6dcc9b39c
+  GitRepo: https://github.com/rea-cruitment/simple-sinatra-app.git
+  GitBranch: master
