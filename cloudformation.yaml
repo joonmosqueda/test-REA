@@ -93,6 +93,7 @@ Resources:
           exec >> /var/log/user-data.log
           exec 2>&1
           echo "Deploying Sinatra App"
+          yum update
           yum install -y git rubygems
           gem install bundler
           AppFolder=/REA/simple-sinatra-app
