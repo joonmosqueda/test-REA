@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<proxy>
-  <name>forwardproxy</name>
-  <port>3128</port>
-  <noProxyHost>localhost,127.0.0.1,.thenational.com,.nab.com.au,*.ap-southeast-2.compute.internal,artifactory.aus.thenational.com,github.aus.thenational.com</noProxyHost>
-  <secretPassword>y3BTkBkEkVmm0LtNEUqFYQ==</secretPassword>
-  <testUrl>http://ec2.amazonaws.com</testUrl>
-</proxy>
