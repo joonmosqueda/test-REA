@@ -9,7 +9,12 @@ Parameters:
   VPC: "vpc-82f789e5"
   Subnets: "subnet-5217c90a,subnet-770a2610,subnet-86045dcf"
   InstanceType: "t2.micro"
+  InstanceMinSize: "0"
+  InstanceMaxSize: "3"
+  InstanceDesiredCapacity: "2"
   InternalCertificateId: "arn:aws:iam::724867262719:server-certificate/SelfSigned"
   AMI: ami-08589eca6dcc9b39c
+  InternalNetwork: "0.0.0.0/0"
+  ExternalNetwork: "0.0.0.0/0"
   GitRepo: https://github.com/rea-cruitment/simple-sinatra-app.git
   GitBranch: master

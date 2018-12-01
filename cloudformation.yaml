@@ -18,6 +18,18 @@ Parameters:
     Type: String
     Default: t2.micro
     Description: "EC2 Instance Type"
+  InstanceMinSize:
+    Type: String
+    Default: "0"
+    Description: "EC2 Minimum Instances"
+  InstanceMaxSize:
+    Type: String
+    Default: "3"
+    Description: "EC2 Maximum Instances"
+  InstanceDesiredCapacity:
+    Type: String
+    Default: "2"
+    Description: "EC2 Desired Instances"   
   InternalCertificateId:
     Type: String 
     Description: ARN of the IAM server certificate to use with the ELB.
@@ -26,11 +38,9 @@ Parameters:
     Description: "AMI ID"
   InternalNetwork:
     Type: String
-    Default: "0.0.0.0/0"
     Description: "Network CIDR"
   ExternalNetwork:
     Type: String
-    Default: "0.0.0.0/0"
     Description: "Network CIDR"
   GitRepo:
     Type: String
@@ -88,7 +98,6 @@ Resources:
           yum install -y git rubygems
           gem install bundler
           AppFolder=/REA/simple-sinatra-app
-          #git clone https://github.com/rea-cruitment/simple-sinatra-app.git $AppFolder
           git clone --single-branch -b ${GitBranch} ${GitRepo} $AppFolder
           cd $AppFolder
           bundle install
@@ -119,9 +128,9 @@ Resources:
     Properties:
       VPCZoneIdentifier: !Ref Subnets
       LaunchConfigurationName: !Ref LaunchConfiguration
-      MinSize: '0'
-      MaxSize: '3'
-      DesiredCapacity: '2'
+      MinSize: !Ref InstanceMinSize
+      MaxSize: !Ref InstanceMaxSize
+      DesiredCapacity: !Ref InstanceDesiredCapacity
       HealthCheckType: "ELB"
       HealthCheckGracePeriod: '240'
       LoadBalancerNames:
