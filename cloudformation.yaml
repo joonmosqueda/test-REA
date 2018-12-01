@@ -91,7 +91,6 @@ Resources:
           cd /REA/simple-sinatra-app
           bundle install
           bundle exec rackup -o 0.0.0.0
-          #/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AutoscalingGroup --region ${AWS::Region}
 
   AutoscalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -144,7 +143,7 @@ Resources:
       SecurityGroups:
       - !Ref ELBSecurityGroup
       Subnets: !Ref Subnets
-      Scheme: internal
+      Scheme: internet-facing
       Listeners:
       - InstancePort: 9292
         InstanceProtocol: HTTP
