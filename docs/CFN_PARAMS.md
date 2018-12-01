@@ -34,6 +34,6 @@ When spinning up TEST-REA stack, a number of pieces of information are required 
 
 `ExternalNetwork`: "0.0.0.0/0"
 
-`GitRepo`: The URL for the bootstrap repository.  eg: "https://github.com/rea-cruitment/simple-sinatra-app.git"
+`GitRepo`: The URL for the web app repository.  eg: "https://github.com/rea-cruitment/simple-sinatra-app.git"
 
 `GitBranch`: Which Git branch should be used for simple sinatra app?  eg: "master".
