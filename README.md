@@ -47,7 +47,7 @@ Further information on parameters and their values can be found [here](docs/CFN_
 Upgrade should be performed if a new golden AMI is built.  Running `run_ansible.sh` with updated parameter file will then need to be performed.
 
 ## Backup
-As there is no data on the TEST-REA stack that will required restoration if lost, hence backup is not being considered.
+As there is no data on the TEST-REA stack that will require restoration if lost, hence backup is not being considered.
 
 ## Responsibilites and ownership
 - You as the end user builds, owns and operates the service.  It will be your responsibility to ensure the service stays updated in line with your security requirements.  
