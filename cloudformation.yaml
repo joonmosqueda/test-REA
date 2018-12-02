@@ -49,6 +49,15 @@ Parameters:
   GitBranch:
     Type: String
     Description: Git Branch of App
+  HostDnsSuffix:
+    Type: String
+    Description: DNX Suffix
+  ZoneId: "Z1ABC2DE3FGHI"
+    Type: String
+    Description: AWS Zone ID
+  Route53Profile:
+    Type: String
+    Description: IAM Route53 role
 
 Resources:
   ELBSecurityGroup:
