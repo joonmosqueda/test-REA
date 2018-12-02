@@ -110,7 +110,7 @@ Resources:
           EOF
           curl https://s3.amazonaws.com//aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
           chmod +x ./awslogs-agent-setup.py
-          ./awslogs-agent-setup.py -n -r us-east-1 -c file:///tmp/cw_agent.config
+          ./awslogs-agent-setup.py -n -r ap-southeast-2 -c file:///tmp/cw_agent.config
 
           echo "Deploying Sinatra App"
           yum update
