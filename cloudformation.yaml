@@ -92,6 +92,22 @@ Resources:
           #!/bin/bash -ex
           exec >> /var/log/user-data.log
           exec 2>&1
+          
+          echo "Configure AWS CloudWatch Logging"
+          cat <<EOF >>/tmp/cw_agent.config
+          [general]
+          state_file = /var/awslogs/state/agent-state
+          
+          [/var/log/user-data.log]
+          file = /var/log/user-data.log
+          log_group_name = TestRea
+          log_stream_name = {instance_id}
+          datetime_format = %b %d %H:%M:%S
+          EOF
+          curl https://s3.amazonaws.com//aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
+          chmod +x ./awslogs-agent-setup.py
+          ./awslogs-agent-setup.py -n -r us-east-1 -c file:///tmp/cw_agent.config
+
           echo "Deploying Sinatra App"
           yum update
           yum install -y git rubygems
@@ -134,6 +150,12 @@ Resources:
       HealthCheckGracePeriod: '240'
       LoadBalancerNames:
       - !Ref ELB
+
+  LogGroup:
+    Type: AWS:: Logs::LogGroup
+    Properties:
+      LogGroupName: "TestRea"
+      RetentionInDays: '7'
 
 Outputs:
   LoadBalancerDNSName:
