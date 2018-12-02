@@ -63,7 +63,7 @@ Resources:
           #!/bin/bash -ex
           exec >> /var/log/user-data.log
           exec 2>&1
-          yum install -y ansible
+          yum install -y ansible2 git
 
   AutoscalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup

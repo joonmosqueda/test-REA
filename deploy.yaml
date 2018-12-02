@@ -16,6 +16,6 @@
         validate_certs: no
 #    TODO:
 #    - name: create or update dns
-#        shell: Route53toELB.sh "{{ ((config_file | basename ) | splitext)[0] }}" '{{ config.Parameters.HostDnsSuffix }}' '{{ config.Parameters.ZoneId }}' '{{ config.Parameters.Route53Profile }}' >> Route53toELB.log
+#        shell: Route53toELB.sh "{{ ((config_file | basename ) | splitext)[0] }}" "{{ config.Parameters.HostDnsSuffix }}" "{{ config.Parameters.ZoneId }}" "{{ config.Parameters.Route53Profile }}" >> Route53toELB.log
 #        args:
 #          chdir: scripts/

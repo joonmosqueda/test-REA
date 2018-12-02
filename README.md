@@ -9,12 +9,15 @@ The TEST-REA product offered via this repository will provide a Simple Sinatra W
 Once built, Simple Sinatra Web App Stack will come with the following features:
 
 - Web App deployed on EC2 instance(s) in a AutoScaling Group and an ELB. This will ensure that an instance is always available.
-- Route53 DNS A Record, updating the domain with the alias of ELB created.
-- Logs will be automatically published to CloudWatch, into a group created based on parameters entered.
+- ASG Desired capacity is parameterized to allow for scalability
+- Logs will be automatically published to CloudWatch, into a group created in prereq steps.
+- Security groups are defined for each layer: ELB and EC2
+- Git repo and branch is parameterized to allow deployment of other sinatra web app
 
 **Limitations**
 - Using Amazon Linux 2 AMI (ami-08589eca6dcc9b39c); golden AMI should be provisioned for more stable deployments
-- Git Repo URL is via https as cloning via ssh require additional authentication configuration
+- Git Repo URL is via https as cloning via ssh require additional authentication configuration (for simplicity)
+- Route53 DNS CNAME Record, updating the domain with the alias of ELB created.
 
 ## Launching TEST-REA
 Launching TEST-REA requires a bit of setup work prior to actually creating the instance.  

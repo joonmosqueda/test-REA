@@ -55,11 +55,11 @@ When spinning up TEST-REA stack, a number of pieces of information are required 
 `GitBranch`: Git branch should to be used for simple sinatra app.  
     e.g.: "master".
 
-`HostDnsSuffix`: DNS Suffix to be used for DNS record.  
+`HostDnsSuffix`: DNS Suffix to be used for DNS record. Currently NOT being used.
     e.g.: nonprod.rea.com
   
-`ZoneId`: AWS Route53 Zone ID.  
+`ZoneId`: AWS Route53 Zone ID. Currently NOT being used.  
     e.g:"Z1ABC2DE3FGHI"
   
-`Route53Profile`: AWS Role required to update DNS records in AWS Route53.  
+`Route53Profile`: AWS Role required to update DNS records in AWS Route53. Currently NOT being used.  
     e.g.:"mjoonjoel_Route53Role"

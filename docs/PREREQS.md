@@ -9,14 +9,15 @@ Required
 4.  IAM Role for CloudWatch logs.
 5.  VPC and subnet details for the TEST-REA stack
 6.  The AMI ID to use for building new TEST-REA EC2 instance(s).
+7.  CloudWatch LogGroup
 
 
 ## Build box/EC2 Instance
 An ec2 instance, build box or jump box that has the same role you wish to use when creating the TEST-REA stack, or the ability to assume the required role..
 
-If your account doesn't already have a build/jump box, you can create one using the AWS console, or running [this cloudformation template](templates\template-buildbox.yaml)
+If your account doesn't already have a build/jump box, you can create one using the AWS console, or using [this cloudformation template](templates\template-buildbox.yaml)
 
-Once you've created your build box, create an ssh config and save your SSH keys for accessing GitHub repositories, so that you are able to clone the TEST-REA repository onto the buildbox.  Steps 1 and 2 are required if the repo requires authentication.  For publicly available repos, proceed to step 3.
+Once you've created your build box, create an ssh config and save your SSH keys for accessing GitHub repositories if auththentication is required, so that you are able to clone the TEST-REA repository onto the buildbox.  Steps 1 and 2 are required if the repo requires authentication.  For publicly available repos, proceed to step 3.
 1. Copy your SSH keys onto the build box so you can access GitHub. 
    If you need to set this up, refer to: https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
    ```
@@ -59,8 +60,7 @@ Create an SSL certificate for the TEST-REA stack. This will be setup against the
 
 ### Uploading the Certificate to AWS
 A certificate is required for the ELB, so that SSL is used encrypt communication to/from TEST-REA stack.
-With the certificate, the .pem file can't contain the same certificate that's in the .cer file. Generating from Venafi will provide the root and intermediate certificates.  
-Generating from the command line will require you to find the root chain certificate for upload.
+With the certificate, the .pem file can't contain the same certificate that's in the .cer file. Generating from the command line will require you to find the root chain certificate for upload.
 
 Below is the command that need to be run from the build box, assuming that the AWS ClI is available.
 
@@ -84,3 +84,12 @@ To find the networking details:
 2. Navigate to the `VPC` service, and list VPCs.  Note the ID of the VPC you need.
 3. Navigate to `Subnets` and filter by the VPC ID you selected.  Take note of all the subnets listed for that VPC.
 
+
+## CloudWatch LogGroup
+An AWS CloudWatch LogGroup "TestRea" is required to contain log streams from EC2 instance(s).
+
+To create a log group, follow the below steps:
+1. Open the CloudWatch console at https://console.aws.amazon.com/cloudwatch/.
+2. In the navigation pane, choose Logs.
+3. Choose Actions, Create log group.
+4. Type a name for the log group: `TestRea`, and choose Create log group.
