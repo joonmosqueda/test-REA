@@ -18,3 +18,6 @@ Parameters:
   ExternalNetwork: "0.0.0.0/0"
   GitRepo: https://github.com/rea-cruitment/simple-sinatra-app.git
   GitBranch: master
+  HostDnsSuffix: nonprod.rea.com
+  ZoneId: "Z1ABC2DE3FGHI"
+  Route53Profile: "mjoonjoel_Route53Role"
