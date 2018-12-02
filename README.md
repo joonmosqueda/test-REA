@@ -1,4 +1,4 @@
-# TEST-REA
+# TEST-REA 
 
 ## Product Overview
 The TEST-REA product offered via this repository will provide a Simple Sinatra Web App stack on Amazon, implementing features described in the next section.
