@@ -52,7 +52,7 @@ Parameters:
   HostDnsSuffix:
     Type: String
     Description: DNX Suffix
-  ZoneId: "Z1ABC2DE3FGHI"
+  ZoneId:
     Type: String
     Description: AWS Zone ID
   Route53Profile:
