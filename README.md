@@ -10,19 +10,18 @@ Once built, Simple Sinatra Web App Stack will come with the following features:
 
 - Web App deployed on EC2 instance(s) in a AutoScaling Group and an ELB. This will ensure that an instance is always available.
 - Route53 DNS A Record, updating the domain with the alias of ELB created.
-- Power management features built in.  Turned off after 7pm, restarted 7am and not run on the weekends.  This is configured via the AutoScaling LaunchConfiguration.
 - Logs will be automatically published to CloudWatch, into a group created based on parameters entered.
 
 **Limitations**
 - Using Amazon Linux 2 AMI (ami-08589eca6dcc9b39c); golden AMI should be provisioned for more stable deployments
+- Amazon Linux 2 AMI have version dependent packages: ansible2; cloudwatch agent
 - DNS record for a more readable URL pointing to ELB; currently using only ELB DNS endpoint
-- Cloudwatch logging is not enabled as it requires an IAM instance profile role defined beforehand and making the prereq steps complicated
 
 ## Launching TEST-REA
 Launching TEST-REA requires a bit of setup work prior to actually creating the instance.  
 
 ### Pre-requistes 
-At this stage, there are a number of manaual prerequisite steps needed prior to provisioning a TEST-REA stack.  These are things like certificate creation and collection of information required to launch the product.
+At this stage, there are a number of manaual prerequisite steps needed prior to provisioning a TEST-REA stack.  These are things like certificate creation, IAM policy in a role, and collection of information required to launch the product.
 
 Follow this [step-by-step guide for meeting prerequisites](docs/PREREQS.md) before launching a TEST-REA stack.  
 
@@ -30,7 +29,7 @@ Follow this [step-by-step guide for meeting prerequisites](docs/PREREQS.md) befo
 When launching a TEST-REA from the command line, there are a number of parameters required.  These will be populated
 with values obtained, and items created whilst going through the prerequisite checklist.  
 
-Further information on parameters and their values can be found [here](docs/CFN_PARAMS.md).
+Further information on parameters and their values can be found [here](docs/PARAMS.md).
 
 
 ### How to launch a TEST-REA stack

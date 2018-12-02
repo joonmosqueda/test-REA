@@ -5,7 +5,7 @@
       include_vars:
         file: "{{ config_file }}"
         name: config
-    - name: create test stack
+    - name: create stack
       cloudformation:
         stack_name: "{{ ((config_file | basename ) | splitext)[0] }}"
         state: "present"
@@ -14,3 +14,7 @@
         template_parameters: '{{ config.Parameters }}'
         tags: '{{ config.Tags }}'
         validate_certs: no
+    - name: crate or update dns
+        shell: Route53toELB.sh "{{ ((config_file | basename ) | splitext)[0] }}" '{{ config.Parameters }}'>> Route53toELB.log
+        args:
+          chdir: scripts/

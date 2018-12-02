@@ -6,10 +6,9 @@ Required
 1.  A build or jump box in the account in which the TEST-REA stack will be provisioned. Only required if there is a need to SSH onto the EC2 instance(s) and to and to fullfil some prerequisite steps.
 2.  An EC2 KeyPair, used for SSH access to the EC2 instance(s).
 3.  A Certificate for the TEST-REA stack, loaded into the ELB.
-4.  Service account to connect to Github.
-5.  An S3 bucket for backups, if configured.
-6.  VPC and subnet details for the TEST-REA stack
-7.  The AMI ID to use for building new TEST-REA EC2 instance(s).
+4.  IAM Role for CloudWatch logs.
+5.  VPC and subnet details for the TEST-REA stack
+6.  The AMI ID to use for building new TEST-REA EC2 instance(s).
 
 
 ## Build box/EC2 Instance
@@ -17,7 +16,7 @@ An ec2 instance, build box or jump box that has the same role you wish to use wh
 
 If your account doesn't already have a build/jump box, you can create one using the AWS console, or running [this cloudformation template](templates\template-buildbox.yaml)
 
-Once you've created your build box, create an ssh config and save your SSH keys for accessing GitHub repositories, so that you are able to clone the TEST-REA repository onto the buildbox.
+Once you've created your build box, create an ssh config and save your SSH keys for accessing GitHub repositories, so that you are able to clone the TEST-REA repository onto the buildbox.  Steps 1 and 2 are required if the repo requires authentication.  For publicly available repos, proceed to step 3.
 1. Copy your SSH keys onto the build box so you can access GitHub. 
    If you need to set this up, refer to: https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
    ```
@@ -32,9 +31,13 @@ Once you've created your build box, create an ssh config and save your SSH keys 
    IdentityFile    ~/.ssh/<your_private_key>
    StrictHostKeyChecking no
    ```
-3. Clone the TEST-REA repository
+3. Install ansible2 and git
    ```
-   https://github.com/joonmosqueda/test-REA.git
+   yum install -y ansible2 git
+   ```
+4. Clone the TEST-REA repository
+   ```
+   https://github.com/mjoonjoel/test-REA.git
    ```
 
 
@@ -54,7 +57,6 @@ To create an AWS KeyPair, there are 2 options:
 ## Certificates
 Create an SSL certificate for the TEST-REA stack. This will be setup against the load balancer that sits in front of the web app.  
 
-
 ### Uploading the Certificate to AWS
 A certificate is required for the ELB, so that SSL is used encrypt communication to/from TEST-REA stack.
 With the certificate, the .pem file can't contain the same certificate that's in the .cer file. Generating from Venafi will provide the root and intermediate certificates.  
@@ -67,27 +69,11 @@ Below is the command that need to be run from the build box, assuming that the A
     ```
 
 
-## GitHub Service Accounts
-A service account is required to access GitHub repositories.  Initially, it will be used to access the TEST-REA repository and any other repository.
+## IAM Role for CloudWatch logs
+An IAM role is attached to the EC2 instance(s).  The role is required to have access to AWS services: CloudWatch or S3(if required)
 
-1. Login to github with the service account once access has been granted.
-2. Add SSH public key for GitHubService account in GitHub. 
-   - Generate a set of SSH keys (`ssh-keygen -t rsa -b 4096 -f <filename>`)
-   - Securely store the private key
-   - Login to GitHub using service account credentials and add public key for the GitHub service account user. https://github.com/settings/ssh
-3. Provide service account the required permissions to access the project and bootstrap repositories and the bootstrap repository.  This is done via the GitHub console, and is likely to be managed in a particular way for each team.
-
-
-## S3 Bucket
-To save backups, if configured, an S3 bucket should be created. 
-
-### To create an S3 bucket:
-1. Login to the AWS account, open S3.
-2. Click `Create Bucket`
-3. Enter a unique bucket name, and choose if you're copying settings from another bucket
-4. Set required properties
-5. Set required permissions
-6. Review settings and click `Create bucket`.
+Follow step 1 in the below link to create an IAM role using the AWS console:
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html
 
 
 ## VPC and Subnets

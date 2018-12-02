@@ -18,6 +18,8 @@ When spinning up TEST-REA stack, a number of pieces of information are required 
 
 `Subnets`: Provide list of minimum 3 subnets in the VPC, one per availability zone.
 
+`InstanceProfile`: IAM instance profile role used to access CloudWatch and S3.  e.g: "mjoonjoel_InstanceRole"
+
 `InstanceType`: EC2 instance type to launch TEST-REA.  e.g.: "t2.micro".
 
 `InstanceMinSize`: Minimum number of instances launched by ASG.  e.g.: "0"
