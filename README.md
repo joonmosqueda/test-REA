@@ -14,8 +14,7 @@ Once built, Simple Sinatra Web App Stack will come with the following features:
 
 **Limitations**
 - Using Amazon Linux 2 AMI (ami-08589eca6dcc9b39c); golden AMI should be provisioned for more stable deployments
-- Amazon Linux 2 AMI have version dependent packages: ansible2; cloudwatch agent
-- DNS record for a more readable URL pointing to ELB; currently using only ELB DNS endpoint
+- Git Repo URL is via https as cloning via ssh require additional authentication configuration
 
 ## Launching TEST-REA
 Launching TEST-REA requires a bit of setup work prior to actually creating the instance.  

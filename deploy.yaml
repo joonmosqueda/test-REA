@@ -14,7 +14,7 @@
         template_parameters: '{{ config.Parameters }}'
         tags: '{{ config.Tags }}'
         validate_certs: no
-    - name: crate or update dns
-        shell: Route53toELB.sh "{{ ((config_file | basename ) | splitext)[0] }}" '{{ config.Parameters }}'>> Route53toELB.log
-        args:
-          chdir: scripts/
+#    - name: create or update dns
+#        shell: Route53toELB.sh "{{ ((config_file | basename ) | splitext)[0] }}" '{{ config.Parameters }}'>> Route53toELB.log
+#        args:
+#          chdir: scripts/

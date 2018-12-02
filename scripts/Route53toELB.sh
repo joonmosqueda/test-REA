@@ -1,8 +1,15 @@
 #!/bin/bash -ex
 
-HOSTNAME="${HOST}.${DOMAIN}"
+ENV_HOSTNAME="`echo $1 | awk '{print tolower($0)}'`"
+HOST_DNS_SUFFIX=$2
+ZONE_ID=$3
+ROUTE53_PROFILE=$4
 
 JSONFILE=/tmp/json
+
+targetElbARN=`aws cloudformation describe-stacks --stack-name ${ENV_HOSTNAME} --query 'Stacks[].Outputs[?starts_with(OutputKey, \`ELBEndpointAddress\`) == \`true\`].OutputValue' --output text`
+
+unset AWS_SESSION_TOKEN AWS_DELEGATION_TOKEN AWS_SECRET_ACCESS_KEY AWS_ACCESS_KEY_ID AWS_SECURITY_TOKEN AWS_ACCESS_KEY AWS_SECRET_KEY
 
 # Assume a role and extract credentials
 export AWS_REGION="ap-southeast-2"
@@ -14,9 +21,6 @@ export AWS_ACCESS_KEY_ID
 AWS_SECURITY_TOKEN=$(grep SessionToken /tmp/route53.json | awk -F: '{print $2}' | awk -F\" '{print $2}')
 export AWS_SECURITY_TOKEN
 
-# Check existing DNS record in zone
-existingRecords=$(dig +short "${HOSTNAME}"); if [ -z "$existingRecords" ]; then echo FAILURE; else echo SUCCESS; fi
-
 cat <<EOF > "$JSONFILE"
 {
     "Comment": "update elb dns to route53 endpoint",
@@ -24,14 +28,14 @@ cat <<EOF > "$JSONFILE"
         {
             "Action": "UPSERT",
             "ResourceRecordSet": {
-                "Name": "$HOSTNAME.",
-                "Type": "A",
-                "AliasTarget":
-                    {
-                        "HostedZoneId": "$ELB_ZONEID",
-                        "DNSName": "$ELB_DNS",
-                        "EvaluateTargetHealth": false
-                    }
+                "Name": "$ENV_HOSTNAME.$HOST_DNS_SUFFIX",
+                "Type": "CNAME",
+                "TTL": 30,
+                "ResourceRecords": [
+                                    {
+                                        "Value": "$targetElbARN"
+                                    }
+                                ]
             }
         }
     ]
