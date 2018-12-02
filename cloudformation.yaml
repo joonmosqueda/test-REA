@@ -12,6 +12,9 @@ Parameters:
   Subnets:
     Type: List<AWS::EC2::Subnet::Id>
     Description: "Ec2 subnets"
+  InstanceProfile: 
+    Type: String
+    Description: IAM Instance role having access to cloudwatch and s3
   InstanceType:
     Type: String
     Default: t2.micro
@@ -83,6 +86,7 @@ Resources:
     Properties:
       KeyName: !Ref KeyName
       ImageId: !Ref AMI
+      IamInstanceProfile: !Ref InstanceProfile
       SecurityGroups:
       - !Ref EC2SecurityGroup
       InstanceType: !Ref InstanceType

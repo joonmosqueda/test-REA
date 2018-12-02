@@ -7,6 +7,7 @@ Parameters:
   KeyName: "mjoonjoel_20181126"
   VPC: "vpc-82f789e5"
   Subnets: "subnet-5217c90a,subnet-770a2610,subnet-86045dcf"
+  InstanceProfile: "mjoonjoel_InstanceRole"
   InstanceType: "t2.micro"
   InstanceMinSize: "0"
   InstanceMaxSize: "3"
