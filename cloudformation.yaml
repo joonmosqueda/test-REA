@@ -153,12 +153,6 @@ Resources:
       LoadBalancerNames:
       - !Ref ELB
 
-  LogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: "TestRea"
-      RetentionInDays: '7'
-
 Outputs:
   LoadBalancerDNSName:
     Description: The DNSName of the load balancer
